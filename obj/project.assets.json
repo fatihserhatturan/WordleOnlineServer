@@ -4337,11 +4337,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\fatti\\Desktop\\Yazlab2.0\\WordleOnlineServer\\WordleOnlineServer.csproj",
+      "projectUniqueName": "C:\\Users\\fatti\\Desktop\\WordleOnlineServer\\WordleOnlineServer.csproj",
       "projectName": "WordleOnlineServer",
-      "projectPath": "C:\\Users\\fatti\\Desktop\\Yazlab2.0\\WordleOnlineServer\\WordleOnlineServer.csproj",
+      "projectPath": "C:\\Users\\fatti\\Desktop\\WordleOnlineServer\\WordleOnlineServer.csproj",
       "packagesPath": "C:\\Users\\fatti\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\fatti\\Desktop\\Yazlab2.0\\WordleOnlineServer\\obj\\",
+      "outputPath": "C:\\Users\\fatti\\Desktop\\WordleOnlineServer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

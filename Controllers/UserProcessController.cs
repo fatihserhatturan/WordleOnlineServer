@@ -18,6 +18,8 @@ namespace WordleOnlineServer.Controllers
         [HttpPost(Name = "Register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
         {
+
+   
             var user = new AppUser { UserName = model.UserName, Email = model.Email, PhoneNumber = model.Phone,};
             var result = await _userManager.CreateAsync(user, model.Password);
 

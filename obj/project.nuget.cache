@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "apDLjEHO46kXggdruWnPQn/B3mpi1UK5y7A3y6ePt22B3uwKKGQCYtJXfQteaH0bf0aC0VqVZTlV7xyGBDnf/Q==",
+  "dgSpecHash": "IU8ZZvJBfGBRqPgP9g7jUUlQApggN9gD6vn+4uSAfd4hxgWLT/HTeYlaUv6TP/Mf7niAs0ATdaKr3crIxkl96Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\fatti\\Desktop\\Yazlab2.0\\WordleOnlineServer\\WordleOnlineServer.csproj",
+  "projectFilePath": "C:\\Users\\fatti\\Desktop\\WordleOnlineServer\\WordleOnlineServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\fatti\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\fatti\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
