@@ -9,13 +9,15 @@ namespace WordleOnlineServer.Controllers
     public class UserProcessController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public UserProcessController(UserManager<AppUser> userManager)
+        public UserProcessController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
-        [HttpPost(Name = "Register")]
+        [HttpPost("register", Name = "Register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
         {
 
@@ -34,5 +36,25 @@ namespace WordleOnlineServer.Controllers
 
 
         }
+
+        [HttpPost("login", Name = "Login")]
+        public async Task<IActionResult> Login([FromBody] UserLoginModel model)
+        {
+            
+            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, true);
+
+            Console.WriteLine(result);
+
+            if (result.Succeeded)
+            {
+                return Ok("Kullanıcı Girişi Başarılı");
+            }
+            else
+            {
+                var errors = result.IsLockedOut ? "Hesap kilitlenmiş" : "Giriş başarısız";
+                return BadRequest(errors);
+            }   
+        }
+
     }
 }
