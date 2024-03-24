@@ -22,7 +22,7 @@ namespace WordleOnlineServer.Controllers
         {
 
    
-            var user = new AppUser { UserName = model.UserName, Email = model.Email, PhoneNumber = model.Phone,};
+            var user = new AppUser { UserName = model.UserName, Email = model.Email, PhoneNumber = model.Phone,EmailConfirmed = true};
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
@@ -43,7 +43,6 @@ namespace WordleOnlineServer.Controllers
             
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, true);
 
-            Console.WriteLine(result);
 
             if (result.Succeeded)
             {
@@ -54,6 +53,7 @@ namespace WordleOnlineServer.Controllers
                 var errors = result.IsLockedOut ? "Hesap kilitlenmiş" : "Giriş başarısız";
                 return BadRequest(errors);
             }   
+
         }
 
     }
