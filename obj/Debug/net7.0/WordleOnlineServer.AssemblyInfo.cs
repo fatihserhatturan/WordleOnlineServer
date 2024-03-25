@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WordleOnlineServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+036042e1cdfbd439ee586d04b44e27ad57a3a7e0")]
 [assembly: System.Reflection.AssemblyProductAttribute("WordleOnlineServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WordleOnlineServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
