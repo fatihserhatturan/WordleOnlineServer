@@ -1,4 +1,4 @@
-﻿namespace WordleOnlineServer.Models
+﻿namespace WordleOnlineServer.Models.Dtos
 {
     public class UserLoginModel
     {

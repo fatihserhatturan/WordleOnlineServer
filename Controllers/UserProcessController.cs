@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WordleOnlineServer.Models;
+using WordleOnlineServer.Models.Dtos;
+using WordleOnlineServer.Models.MsSqlModels;
 
 namespace WordleOnlineServer.Controllers
 {

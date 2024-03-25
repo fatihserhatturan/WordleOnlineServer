@@ -1,13 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WordleOnlineServer.Models;
+using Microsoft.Extensions.Configuration;
+using WordleOnlineServer.Models.Context;
+using WordleOnlineServer.Models.MsSqlModels;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings");
+var connectionString = builder.Configuration.GetConnectionString("MSSQLConnection");
 // Add services to the container.
 builder.Services.AddDbContext<ProjectDbContext>(options =>
 options.UseSqlServer(connectionString));
+
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ProjectDbContext>();
