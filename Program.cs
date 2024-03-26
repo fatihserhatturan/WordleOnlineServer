@@ -7,6 +7,7 @@ using WordleOnlineServer.Models.Context;
 using WordleOnlineServer.Models.MsSqlModels;
 using WordleOnlineServer.Options.Config;
 using WordleOnlineServer.Options.OptionsSetup;
+using WordleOnlineServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var mongoDBSettings = builder.Configuration.GetSection("MongoDBSettings");
@@ -20,16 +21,12 @@ options.UseSqlServer(connectionString));
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ProjectDbContext>();
 
+builder.Services.AddSingleton<JwtService>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer();
-
-builder.Services.ConfigureOptions<JwtOptionsSetup>();
-builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 var app = builder.Build();
 

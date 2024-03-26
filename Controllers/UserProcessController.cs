@@ -20,12 +20,14 @@ namespace WordleOnlineServer.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly JwtService _jwtService;
 
-        public UserProcessController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,JwtService jwtService)
+        public UserProcessController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JwtService jwtService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtService = jwtService;
         }
+
+
 
         [HttpPost("register", Name = "Register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
@@ -56,9 +58,9 @@ namespace WordleOnlineServer.Controllers
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
-                var tokenString = _jwtService.Generate(user);
+                var tokenString = _jwtService.CreateToken(user);    
                 Console.WriteLine(tokenString);
-                return Ok(new { Token = tokenString, Message = "Kullanıcı başarıyla kaydedildi." });
+                return Ok(new { Token = tokenString, Message = "Kullanıcı girişi başarılı" });
             }
             else
             {

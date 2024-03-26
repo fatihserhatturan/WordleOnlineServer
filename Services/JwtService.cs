@@ -10,36 +10,33 @@ namespace WordleOnlineServer.Services
 {
     public  class JwtService 
     {
-        private readonly JwtOptions _options;
-
-        public JwtService(IOptions<JwtOptions> options)
+        private readonly IConfiguration _config;
+        public JwtService(IConfiguration config)
         {
-            _options = options.Value;
+            _config = config;
         }
-        public string Generate(AppUser user)
+        public string CreateToken(AppUser user)
         {
-            var claims = new Claim[] {
-            
-                new (JwtRegisteredClaimNames.Sub,user.Id.ToString()),
-                new (JwtRegisteredClaimNames.Email,user.Email),
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName)
             };
 
-            var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_options.SecretKey)),
-                SecurityAlgorithms.HmacSha256);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _config.GetSection("Jwt:SecretKey").Value!));
+
+            var cred = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(
-                _options.Issuer,
-                _options.Audience,
-                claims,
-                null,
-                DateTime.UtcNow.AddHours(1),
-                signingCredentials);
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: cred
+                );
 
-            string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return tokenValue;
+            return jwt;
+
         }
     }
 }
