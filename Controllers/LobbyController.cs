@@ -50,5 +50,28 @@ namespace WordleOnlineServer.Controllers
 
             return Ok("İşlem Başarılı");
         }
+
+        [HttpPost("GetLobbyMember", Name = "GetLobbyMember")]
+        public async Task<IActionResult> GetlobbyMember([FromBody] string lobby)
+        {
+
+            if (int.Parse(lobby) == 4)
+                return Json(_mongoService.GetFourLobbyMember());
+
+            if(int.Parse(lobby) == 5)
+                return Json(_mongoService.GetFiveLobbyMember());
+
+            if(int.Parse(lobby) == 6)
+                return Json(_mongoService.GetSixLobbyMember());
+
+            if(int.Parse(lobby) == 7)
+                return Json(_mongoService.GetSevenLobbyMember());
+            else
+                return NotFound();
+            
+        }
+
+        public async Task<IActionResult> SendMatchRequest([FromBody] )
+
     }
 }

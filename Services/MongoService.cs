@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Operations;
 using System.Collections;
 using System.ComponentModel;
+using System.Collections.Generic;
 using WordleOnlineServer.Models.MongoModels;
 using WordleOnlineServer.Models.MsSqlModels;
+using Microsoft.Identity.Client;
 
 namespace WordleOnlineServer.Services
 {
@@ -84,10 +87,24 @@ namespace WordleOnlineServer.Services
              await _fiveletterCollection.DeleteManyAsync(filter2);
              await _sixletterCollection.DeleteManyAsync(filter3);
              await _sevenletterCollection.DeleteManyAsync(filter4);
-             
-
+          
         }
-
-
+        
+        public List<FourLetterLobby> GetFourLobbyMember()
+        {
+                return _fourletterCollection.Find(_=> true).ToList();
+        }
+        public List<FiveLetterLobby> GetFiveLobbyMember()
+        {
+            return _fiveletterCollection.Find(_ => true).ToList();
+        }
+        public List<SixLetterLobby> GetSixLobbyMember()
+        {
+            return _sixletterCollection.Find(_ => true).ToList();
+        }
+        public List<SevenLetterLobby> GetSevenLobbyMember()
+        {
+            return _sevenletterCollection.Find(_ => true).ToList();
+        }
     }
 }
