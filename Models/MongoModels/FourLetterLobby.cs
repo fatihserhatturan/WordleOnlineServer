@@ -1,9 +1,15 @@
-﻿namespace WordleOnlineServer.Models.MongoModels
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+using WordleOnlineServer.Models.MsSqlModels;
+
+namespace WordleOnlineServer.Models.MongoModels
 {
     public class FourLetterLobby
     {
-
-        public List<User> Users { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+        public AppUser User { get; set; }
 
     }
 }

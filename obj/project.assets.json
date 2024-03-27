@@ -6901,6 +6901,7 @@
       "Microsoft.EntityFrameworkCore.Design >= 7.0.0",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.0",
+      "MongoDB.Bson >= 2.24.0",
       "MongoDB.Driver >= 2.24.0",
       "MongoDB.Driver.Core >= 2.24.0",
       "NakamaClient >= 3.11.0",
@@ -6987,6 +6988,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[7.0.0, )"
+          },
+          "MongoDB.Bson": {
+            "target": "Package",
+            "version": "[2.24.0, )"
           },
           "MongoDB.Driver": {
             "target": "Package",
