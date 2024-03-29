@@ -18,8 +18,9 @@ namespace WordleOnlineServer.Services
         private readonly IMongoCollection<SevenLetterLobby> _sevenletterCollection;
         private readonly IMongoCollection<EnableUsers> _enableUserCollection;
         private readonly IMongoCollection<Match> _matchCollection;
+        private readonly IMongoCollection<MatchRequest> _matchRequestCollection;
         private readonly IMongoCollection<User> _userCollection;
-        public MongoService(string connectionString, string databaseName,string fourletterCollection, string fiveletterCollection, string sixletterCollection, string sevenletterCollection, string enableUserCollection, string matchCollection, string userCollection)
+        public MongoService(string connectionString, string databaseName,string fourletterCollection, string fiveletterCollection, string sixletterCollection, string sevenletterCollection, string enableUserCollection, string matchCollection, string matchRequestCollection, string userCollection)
         {
             var client = new MongoClient(connectionString);
             var db = client.GetDatabase(databaseName);
@@ -29,6 +30,7 @@ namespace WordleOnlineServer.Services
             _sevenletterCollection = db.GetCollection<SevenLetterLobby>(sevenletterCollection);
             _enableUserCollection = db.GetCollection<EnableUsers>(enableUserCollection);
             _matchCollection = db.GetCollection<Match>(matchCollection);
+            _matchRequestCollection = db.GetCollection<MatchRequest>(matchRequestCollection);
             _userCollection = db.GetCollection<User>(userCollection);
         }
 
@@ -106,5 +108,47 @@ namespace WordleOnlineServer.Services
         {
             return _sevenletterCollection.Find(_ => true).ToList();
         }
+
+        public async Task SendMatchRequest(AppUser sender,AppUser receiver)
+        {
+            MatchRequest request = new MatchRequest
+            {
+                UserSender = sender,
+                UserReceiver = receiver,
+                Status = false
+            };
+
+            await _matchRequestCollection.InsertOneAsync(request);
+        }
+
+        public async Task<AppUser> ReceiveMatchRequest(AppUser user)
+        {
+            var filter = Builders<MatchRequest>.Filter.Eq(x => x.UserReceiver.Id, user.Id)
+             & Builders<MatchRequest>.Filter.Eq(x => x.Status, false);
+
+            var matchRequests = await _matchRequestCollection.FindAsync(filter);
+            var matchRequest = await matchRequests.FirstOrDefaultAsync();
+
+            if (matchRequest != null)
+            {
+                return matchRequest.UserSender;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public async Task  AcceptMatchRequest(AppUser user)
+        {
+            var filter = Builders<MatchRequest>.Filter.Eq(x => x.UserReceiver.Id, user.Id)
+             & Builders<MatchRequest>.Filter.Eq(x => x.Status, false);
+
+            var matchRequests = await _matchRequestCollection.FindAsync(filter);
+            var matchRequest = await matchRequests.FirstOrDefaultAsync();
+
+            var update = Builders<MatchRequest>.Update.Set(x => x.Status, true);
+            var result = await _matchRequestCollection.UpdateOneAsync(filter, update);
+        }
+
     }
 }

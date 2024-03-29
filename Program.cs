@@ -36,9 +36,10 @@ builder.Services.AddSingleton<MongoService>(sp =>
     var sevenLetterCollection = mongoDBSettings.GetValue<string>("SevenLetterLobby");
     var enableUsersCollection = mongoDBSettings.GetValue<string>("EnableUsers");
     var matchCollection = mongoDBSettings.GetValue<string>("Match");
+    var matchRequestCollection = mongoDBSettings.GetValue<string>("MatchRequest");
     var userCollection = mongoDBSettings.GetValue<string>("User");
 
-    return new MongoService(connectionString, databaseName, fourLetterCollection, fiveLetterCollection, sixLetterCollection, sevenLetterCollection, enableUsersCollection, matchCollection, userCollection);
+    return new MongoService(connectionString, databaseName, fourLetterCollection, fiveLetterCollection, sixLetterCollection, sevenLetterCollection, enableUsersCollection, matchCollection, matchRequestCollection, userCollection);
 });
 
 builder.Services.AddControllers();

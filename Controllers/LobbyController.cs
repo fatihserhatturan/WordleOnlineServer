@@ -71,7 +71,45 @@ namespace WordleOnlineServer.Controllers
             
         }
 
-        public async Task<IActionResult> SendMatchRequest([FromBody] )
+        [HttpPost("SendMatchRequest", Name = "SendMatchRequest")]
+        public async Task<IActionResult> SendMatchRequest([FromBody] SendMatchRequestDTO request)
+        {
+            var sender = await _userManager.FindByNameAsync(request.Sender);
+            var receiver =await _userManager.FindByNameAsync(request.Receiver);
 
+            await _mongoService.SendMatchRequest(sender,receiver);
+
+            return Ok();
+        }
+
+        [HttpPost("ReceiveMatchRequest", Name = "ReceiveMatchRequest")]
+        public async Task<IActionResult> ReceiveMatchRequest([FromBody] string userName)
+        {
+            var receiver = await _userManager.FindByNameAsync(userName);
+
+            var result = await _mongoService.ReceiveMatchRequest(receiver);
+
+            if(result == null || receiver == null)
+                return NotFound();
+            if(result!=null)
+                return Json(result);
+
+            return BadRequest();
+        }
+
+        [HttpPost("AcceptMatchRequest", Name = "AcceptMatchRequest")]
+        public async Task<IActionResult> AcceptMatchRequest([FromBody] string userName)
+        {
+            var receiver = await _userManager.FindByNameAsync(userName);
+
+            var result = await _mongoService.ReceiveMatchRequest(receiver);
+
+            if (result == null || receiver == null)
+                return NotFound();
+            if (result != null)
+                return Json(result);
+
+            return BadRequest();
+        }
     }
 }
