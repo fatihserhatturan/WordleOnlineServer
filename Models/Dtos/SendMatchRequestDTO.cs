@@ -6,5 +6,6 @@ namespace WordleOnlineServer.Models.Dtos
     {
         public string Sender {  get; set; }
         public string Receiver {  get; set; }
+        public int LetterCount { get; set; }
     }
 }

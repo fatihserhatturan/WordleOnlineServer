@@ -77,7 +77,7 @@ namespace WordleOnlineServer.Controllers
             var sender = await _userManager.FindByNameAsync(request.Sender);
             var receiver =await _userManager.FindByNameAsync(request.Receiver);
 
-            await _mongoService.SendMatchRequest(sender,receiver);
+            await _mongoService.SendMatchRequest(sender,receiver,request.LetterCount);
 
             return Ok();
         }
@@ -102,14 +102,29 @@ namespace WordleOnlineServer.Controllers
         {
             var receiver = await _userManager.FindByNameAsync(userName);
 
-            var result = await _mongoService.ReceiveMatchRequest(receiver);
+            var result = await _mongoService.AcceptMatchRequest(receiver);
 
             if (result == null || receiver == null)
                 return NotFound();
             if (result != null)
-                return Json(result);
+            {
+                return Json(result.MatchIdentifier);
+            }
 
             return BadRequest();
         }
+
+        [HttpPost("PushSenderIdentifier", Name = "PushSenderIdentifier")]
+        public async Task<IActionResult> PushSenderIdentifier([FromBody] string userName)
+        {
+            var receiver = await _userManager.FindByNameAsync(userName);
+
+            var result = await _mongoService.GetMatchStatusforSender(receiver);
+
+            if (!result) return NotFound();
+
+            else return Json(result);
+        }
+
     }
 }

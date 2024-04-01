@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using WordleOnlineServer.Models.MongoModels;
 using WordleOnlineServer.Models.MsSqlModels;
 using Microsoft.Identity.Client;
+using WordleOnlineServer.Models.Dtos;
 
 namespace WordleOnlineServer.Services
 {
@@ -33,7 +34,14 @@ namespace WordleOnlineServer.Services
             _matchRequestCollection = db.GetCollection<MatchRequest>(matchRequestCollection);
             _userCollection = db.GetCollection<User>(userCollection);
         }
+        public string GetIdentifier()
+        {
+            Guid uniqueId = Guid.NewGuid();
 
+            string uniqueIdString = uniqueId.ToString();
+
+            return uniqueIdString;
+        }
         public async Task AttendLetterLobby(AppUser user ,int lettercount)
         {
           
@@ -109,13 +117,15 @@ namespace WordleOnlineServer.Services
             return _sevenletterCollection.Find(_ => true).ToList();
         }
 
-        public async Task SendMatchRequest(AppUser sender,AppUser receiver)
+        public async Task SendMatchRequest(AppUser sender,AppUser receiver,int letterCount)
         {
             MatchRequest request = new MatchRequest
             {
                 UserSender = sender,
                 UserReceiver = receiver,
-                Status = false
+                Status = false,
+                LetterCount = letterCount
+                
             };
 
             await _matchRequestCollection.InsertOneAsync(request);
@@ -138,17 +148,57 @@ namespace WordleOnlineServer.Services
                 return null;
             }
         }
-        public async Task  AcceptMatchRequest(AppUser user)
+        public async Task<AcceptMatchReturnDTO> AcceptMatchRequest(AppUser user)
         {
-            var filter = Builders<MatchRequest>.Filter.Eq(x => x.UserReceiver.Id, user.Id)
-             & Builders<MatchRequest>.Filter.Eq(x => x.Status, false);
+            var filter = Builders<MatchRequest>.Filter
+                .Where(x => x.UserReceiver.Id == user.Id && !x.Status);
 
-            var matchRequests = await _matchRequestCollection.FindAsync(filter);
-            var matchRequest = await matchRequests.FirstOrDefaultAsync();
+            var matchRequest = await _matchRequestCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (matchRequest == null)
+            {
+                return null;
+            }
 
             var update = Builders<MatchRequest>.Update.Set(x => x.Status, true);
-            var result = await _matchRequestCollection.UpdateOneAsync(filter, update);
+            await _matchRequestCollection.UpdateOneAsync(filter, update);
+
+            var identifier = await CreateMatch(matchRequest);
+            var sender = matchRequest.UserSender.UserName;
+            var receiver = matchRequest.UserReceiver.UserName;
+
+            return new AcceptMatchReturnDTO(identifier, sender, receiver);
         }
 
+
+        public async Task<string> CreateMatch(MatchRequest request)
+        {
+
+            var match = new Match
+            {
+                UserSender = request.UserSender,
+                UserReceiver = request.UserReceiver,
+                LetterCount = request.LetterCount,
+                MatchIdentifier = GetIdentifier(),
+                Status = true
+            };
+
+            await _matchCollection.InsertOneAsync(match);
+
+            return match.MatchIdentifier;
+        }
+
+        public async Task<bool> GetMatchStatusforSender(AppUser user)
+        {
+            var filter = Builders<Match>.Filter
+                .Where(x => x.UserSender == user && x.Status == true);
+
+            var match = await _matchCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (match == null) { return false; }
+            if(match !=null) { return true; }
+
+            return false;
+        }
     }
 }
