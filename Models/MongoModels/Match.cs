@@ -13,8 +13,8 @@ namespace WordleOnlineServer.Models.MongoModels
         public AppUser UserSender { get; set; }
         public AppUser UserReceiver { get; set; }
         public int LetterCount { get; set; }
-        public string User1Letter { get; set; }
-        public string User2Letter { get; set;}
+        public string UserSenderLetter { get; set; }
+        public string UserReceiverLetter { get; set;}
         public bool Status { get; set; }
 
     }

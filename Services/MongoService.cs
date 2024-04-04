@@ -200,5 +200,55 @@ namespace WordleOnlineServer.Services
 
             return false;
         }
+
+        public async Task<Match> GetMatchByIdentifier(string Id)
+        {
+            var filter = Builders<Match>.Filter
+                .Where(x => x.MatchIdentifier == Id );
+
+            var match = await _matchCollection.Find(filter).FirstOrDefaultAsync();
+
+            return match;
+           
+        }
+        public async Task JoinMatchLetter(GetUserLetterDto dto,string key)
+        {
+            var filter = Builders<Match>.Filter
+                .Where(x => x.MatchIdentifier == dto.MatchIdentifier);
+
+            var match = await _matchCollection.Find(filter).FirstOrDefaultAsync();
+
+            if(key == "sender")
+            {
+                var update = Builders<Match>.Update.Set(x => x.UserSenderLetter, dto.Letter);
+                await _matchCollection.UpdateOneAsync(filter, update);
+            }
+            if (key == "receiver")
+            {
+                var update = Builders<Match>.Update.Set(x => x.UserReceiverLetter, dto.Letter);
+                await _matchCollection.UpdateOneAsync(filter, update);
+            }
+
+        }
+        public async Task<string> SwitchMatchLetter(GetUserLetterDto dto, string key)
+        {
+            var filter = Builders<Match>.Filter
+                .Where(x => x.MatchIdentifier == dto.MatchIdentifier);
+
+            var match = await _matchCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (key == "sender")
+            {
+                return match.UserReceiverLetter;
+            }
+            if (key == "receiver")
+            {
+                return match.UserSenderLetter;
+            }
+
+            return "Some Errors";
+
+        }
+
     }
 }
