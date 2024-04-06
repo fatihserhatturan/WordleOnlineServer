@@ -12,14 +12,10 @@ namespace WordleOnlineServer.Controllers
     {
 
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly JwtService _jwtService;
         private readonly MongoService _mongoService;
-        public MatchController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JwtService jwtService, MongoService mongoService)
+        public MatchController(UserManager<AppUser> userManager, MongoService mongoService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _jwtService = jwtService;
             _mongoService = mongoService;
         }
 
@@ -44,6 +40,32 @@ namespace WordleOnlineServer.Controllers
 
         }
 
+        [HttpPost("UserTimeOut", Name = "UserTimeOut")]
+        public async Task<IActionResult> UserTimeOut([FromBody] UserMatchDTO dTO)
+        {
+            var user = await _userManager.FindByNameAsync(dTO.userName);
+
+            var match = await _mongoService.GetMatchByIdentifier(dTO.matchIdentifier);
+
+            if (match.UserSender.UserName == user.UserName)
+            {
+                string value = await _mongoService.UserFailByTimeOut(dTO, "sender");
+
+                return Json(value);
+            }
+            if (match.UserReceiver.UserName == user.UserName)
+            {
+                string value = await _mongoService.UserFailByTimeOut(dTO, "receiver");
+
+                return Json(value);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
         [HttpPost("SwitchUserLetter", Name = "SwitchUserLetter")]
         public async Task<IActionResult> SwitchUserLetter([FromBody] GetUserLetterDto dto)
         {
@@ -53,13 +75,24 @@ namespace WordleOnlineServer.Controllers
 
             if (match.UserSender.UserName == user.UserName)
             {
-               string value =  await _mongoService.SwitchMatchLetter(dto, "sender");
+
+                string value =  await _mongoService.SwitchMatchLetter(dto, "sender");
+
+                if(value == "fail")
+                {
+                    return BadRequest("match fail , you win");
+                }
 
                 return Json(value);
             }
             if (match.UserReceiver.UserName == user.UserName)
             {
                 string value = await _mongoService.SwitchMatchLetter(dto, "receiver");
+
+                if (value == "fail")
+                {
+                    return BadRequest("match fail , you win");
+                }
 
                 return Json(value);
             }
@@ -68,8 +101,10 @@ namespace WordleOnlineServer.Controllers
                 return NotFound();
             }
 
-
         }
+
+ 
+
 
     }
 }

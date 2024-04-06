@@ -11,14 +11,10 @@ namespace WordleOnlineServer.Controllers
     public class LobbyController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly JwtService _jwtService;
         private readonly MongoService _mongoService;
-        public LobbyController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JwtService jwtService, MongoService mongoService)
+        public LobbyController(UserManager<AppUser> userManager, MongoService mongoService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _jwtService = jwtService;
             _mongoService = mongoService;
         }
 

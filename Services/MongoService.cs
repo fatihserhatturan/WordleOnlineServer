@@ -211,6 +211,9 @@ namespace WordleOnlineServer.Services
             return match;
            
         }
+
+      
+
         public async Task JoinMatchLetter(GetUserLetterDto dto,string key)
         {
             var filter = Builders<Match>.Filter
@@ -230,6 +233,28 @@ namespace WordleOnlineServer.Services
             }
 
         }
+
+        public async Task<string> UserFailByTimeOut(UserMatchDTO dto, string key)
+        {
+            var filter = Builders<Match>.Filter
+                .Where(x => x.MatchIdentifier == dto.matchIdentifier);
+
+            var match = await _matchCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (key == "sender")
+            {
+                var update = Builders<Match>.Update.Set(x => x.Status, false);
+                return "Sender Fail";
+            }
+            if (key == "receiver")
+            {
+                var update = Builders<Match>.Update.Set(x => x.Status, false);
+                return "Receiver Fail";
+            }
+
+            return "Some Errors";
+
+        }
         public async Task<string> SwitchMatchLetter(GetUserLetterDto dto, string key)
         {
             var filter = Builders<Match>.Filter
@@ -237,6 +262,10 @@ namespace WordleOnlineServer.Services
 
             var match = await _matchCollection.Find(filter).FirstOrDefaultAsync();
 
+            if (!match.Status)
+            {
+                return "fail";
+            }
             if (key == "sender")
             {
                 return match.UserReceiverLetter;
@@ -245,10 +274,12 @@ namespace WordleOnlineServer.Services
             {
                 return match.UserSenderLetter;
             }
+            
 
             return "Some Errors";
 
         }
+   
 
     }
 }
