@@ -13,19 +13,28 @@ namespace WordleOnlineServer.Controllers
 
         private readonly UserManager<AppUser> _userManager;
         private readonly MongoService _mongoService;
-        public MatchController(UserManager<AppUser> userManager, MongoService mongoService)
+        private readonly DictionaryService _dictionaryService;
+        public MatchController(UserManager<AppUser> userManager, MongoService mongoService, DictionaryService dictionaryService)
         {
             _userManager = userManager;
             _mongoService = mongoService;
+            _dictionaryService = dictionaryService;
         }
 
 
         [HttpPost("GetUserLetter", Name = "GetUserLetter")]
         public async Task<IActionResult> GetUserLetter([FromBody] GetUserLetterDto dto)
         {
-            var user = await _userManager.FindByNameAsync(dto.Username);
 
+            var user = await _userManager.FindByNameAsync(dto.Username);
             var match = await _mongoService.GetMatchByIdentifier(dto.MatchIdentifier);
+
+            var letterEnable = await _dictionaryService.IsWordEnableForUsing(dto.Letter);
+
+            if (!letterEnable)
+            {
+                return BadRequest("We couldnt find this word in our system");
+            }
 
             if(match.UserSender.UserName == user.UserName)
             {

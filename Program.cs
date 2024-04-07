@@ -23,6 +23,7 @@ builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireCo
     .AddEntityFrameworkStores<ProjectDbContext>();
 
 builder.Services.AddSingleton<JwtService>();
+builder.Services.AddSingleton<DictionaryService>();
 
 builder.Services.AddSingleton<MongoService>(sp =>
 {
