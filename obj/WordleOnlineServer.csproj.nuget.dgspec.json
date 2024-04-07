@@ -65,10 +65,6 @@
               "target": "Package",
               "version": "[7.0.13, )"
             },
-            "Microsoft.Build.Utilities.Core": {
-              "target": "Package",
-              "version": "[17.9.5, )"
-            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -96,10 +92,6 @@
             "MongoDB.Driver.Core": {
               "target": "Package",
               "version": "[2.24.0, )"
-            },
-            "NakamaClient": {
-              "target": "Package",
-              "version": "[3.11.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
