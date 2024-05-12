@@ -41,6 +41,16 @@ Optimized for performance to minimize latency and provide a smooth gaming experi
 Implements security measures such as encryption for sensitive data transmission and secure authentication mechanisms to protect user accounts.
 Implements measures to prevent cheating or unauthorized access to game resources.
 
+## Used Technologies
+
+![.NET Badge](https://img.shields.io/badge/.NET-512BD4?logo=dotnet&logoColor=fff&style=for-the-badge)
+![JSON Web Tokens Badge](https://img.shields.io/badge/JSON%20Web%20Tokens-000?logo=jsonwebtokens&logoColor=fff&style=for-the-badge)
+![Postman Badge](https://img.shields.io/badge/Postman-FF6C37?logo=postman&logoColor=fff&style=for-the-badge)
+![MongoDB Badge](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=fff&style=for-the-badge)
+![Microsoft SQL Server Badge](https://img.shields.io/badge/Microsoft%20SQL%20Server-CC2927?logo=microsoftsqlserver&logoColor=fff&style=for-the-badge)
+![Docker Badge](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff&style=for-the-badge)
+
+
 ### Conclusion :
 
 The Multiplayer Wordle Game API serves as a crucial backend component for the Kotlin application, enabling seamless multiplayer Wordle gameplay experiences for users. By managing game sessions, user interactions, and gameplay logic, the API ensures a smooth and engaging gaming experience while prioritizing security, scalability, and performance. With its comprehensive feature set and robust architecture, the API lays the foundation for a successful multiplayer Wordle gaming platform.
